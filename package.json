@@ -5,9 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.105.4",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4"
@@ -18,7 +21,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.6"
   },
   "description": "Detect and organize the plants of your garden",
   "homepage": "https://vercel.com/gabrieleceranto/my-plant-organizer",
@@ -26,6 +30,6 @@
     "title": "My Plant Organizer",
     "github": "https://github.com/gabrieleceranto/my-plant-organizer",
     "supabase": "https://app.supabase.com/project/pnecwmccrqdtfkjgbips",
-    "createdAt": "2026-05-17T18:11:35.280Z"
+    "createdAt": "2026-05-17T18:23:36.931Z"
   }
 }
