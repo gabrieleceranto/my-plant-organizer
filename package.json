@@ -19,5 +19,13 @@
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "description": "Detect and organize the plants of your garden",
+  "homepage": "https://vercel.com/gabrieleceranto/my-plant-organizer",
+  "creator": {
+    "title": "My Plant Organizer",
+    "github": "https://github.com/gabrieleceranto/my-plant-organizer",
+    "supabase": "https://app.supabase.com/project/pnecwmccrqdtfkjgbips",
+    "createdAt": "2026-05-17T18:11:35.280Z"
   }
 }
