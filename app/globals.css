@@ -204,7 +204,7 @@ body {
 }
 
 .card-body {
-  padding: 16px 18px;
+  padding: 16px 24px 16px 18px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
