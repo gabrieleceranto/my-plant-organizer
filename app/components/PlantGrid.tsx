@@ -4,6 +4,8 @@ import { useState } from 'react';
 import type { Plant } from '@/lib/types';
 import { filterPlants } from '@/lib/filters';
 import PlantCard from './PlantCard';
+import CorrectionDrawer from './CorrectionDrawer';
+import AddPlantDrawer from './AddPlantDrawer';
 
 const FILTERS = [
   { label: 'Tutte', value: 'all' },
@@ -17,14 +19,28 @@ const FILTERS = [
   { label: '⚠️ Da curare', value: 'bad' },
 ];
 
-export default function PlantGrid({ plants }: { plants: Plant[] }) {
+export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }) {
+  const [localPlants, setLocalPlants] = useState<Plant[]>(initialPlants);
   const [activeFilter, setActiveFilter] = useState('all');
   const [search, setSearch] = useState('');
+  const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
+  const [showAddDrawer, setShowAddDrawer] = useState(false);
 
-  const filtered = filterPlants(plants, activeFilter, search);
+  const filtered = filterPlants(localPlants, activeFilter, search);
+  const warnCount = localPlants.filter((p) => p.health === 'warn').length;
+  const badCount = localPlants.filter((p) => p.health === 'bad').length;
 
-  const warnCount = plants.filter((p) => p.health === 'warn').length;
-  const badCount = plants.filter((p) => p.health === 'bad').length;
+  function handlePlantSaved(updated: Plant) {
+    setLocalPlants((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+  }
+
+  function handlePlantDeleted(id: number) {
+    setLocalPlants((prev) => prev.filter((p) => p.id !== id));
+  }
+
+  function handlePlantAdded(plant: Plant) {
+    setLocalPlants((prev) => [...prev, plant]);
+  }
 
   return (
     <>
@@ -46,6 +62,9 @@ export default function PlantGrid({ plants }: { plants: Plant[] }) {
             <div className="stat-num" style={{ color: '#e07070' }}>{badCount}</div>
             <div className="stat-label">urgenti</div>
           </div>
+          <form action="/api/auth/logout" method="POST">
+            <button type="submit" className="btn-logout">Esci</button>
+          </form>
         </div>
       </header>
 
@@ -68,19 +87,43 @@ export default function PlantGrid({ plants }: { plants: Plant[] }) {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
+        <button className="btn-add" onClick={() => setShowAddDrawer(true)}>+ Aggiungi</button>
       </div>
 
       <div className="plant-grid">
         {filtered.length === 0 ? (
           <div className="empty-state">Nessuna pianta trovata per questa ricerca.</div>
         ) : (
-          filtered.map((plant, i) => <PlantCard key={plant.id} plant={plant} index={i} />)
+          filtered.map((plant, i) => (
+            <PlantCard
+              key={plant.id}
+              plant={plant}
+              index={i}
+              onCorrect={setSelectedPlant}
+              onDelete={handlePlantDeleted}
+            />
+          ))
         )}
       </div>
 
       <footer className="site-footer">
-        Terrazzo · {plants.length} piante catalogate
+        Terrazzo · {localPlants.length} piante catalogate
       </footer>
+
+      {selectedPlant && (
+        <CorrectionDrawer
+          plant={selectedPlant}
+          onClose={() => setSelectedPlant(null)}
+          onSaved={(updated) => { handlePlantSaved(updated); setSelectedPlant(null); }}
+        />
+      )}
+
+      {showAddDrawer && (
+        <AddPlantDrawer
+          onClose={() => setShowAddDrawer(false)}
+          onAdded={handlePlantAdded}
+        />
+      )}
     </>
   );
 }

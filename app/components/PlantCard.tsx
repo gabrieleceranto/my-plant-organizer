@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 import type { Plant } from '@/lib/types';
 
@@ -7,7 +10,28 @@ const healthLabel: Record<string, string> = {
   bad: 'Urgente',
 };
 
-export default function PlantCard({ plant, index }: { plant: Plant; index: number }) {
+interface Props {
+  plant: Plant;
+  index: number;
+  onCorrect: (plant: Plant) => void;
+  onDelete: (id: number) => void;
+}
+
+export default function PlantCard({ plant, index, onCorrect, onDelete }: Props) {
+  const [confirming, setConfirming] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  async function handleDelete() {
+    setDeleting(true);
+    try {
+      await fetch(`/api/plants/${plant.id}`, { method: 'DELETE' });
+      onDelete(plant.id);
+    } finally {
+      setDeleting(false);
+      setConfirming(false);
+    }
+  }
+
   return (
     <div className="card" style={{ animationDelay: `${index * 0.018}s` }}>
       <Image
@@ -35,7 +59,20 @@ export default function PlantCard({ plant, index }: { plant: Plant; index: numbe
             <div className="health-dot" />
             {healthLabel[plant.health]}
           </div>
-          <div className="id-badge">ID {plant.id}</div>
+          <div className="card-actions">
+            {confirming ? (
+              <div className="delete-confirm">
+                <span>Elimina?</span>
+                <button className="confirm-yes" onClick={handleDelete} disabled={deleting}>Sì</button>
+                <button className="confirm-no" onClick={() => setConfirming(false)}>No</button>
+              </div>
+            ) : (
+              <>
+                <button className="btn-correct" onClick={() => onCorrect(plant)}>Correggi</button>
+                <button className="btn-delete" onClick={() => setConfirming(true)}>🗑</button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

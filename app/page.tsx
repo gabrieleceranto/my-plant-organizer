@@ -1,10 +1,12 @@
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 import type { Plant } from '@/lib/types';
 import PlantGrid from './components/PlantGrid';
 
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 export default async function Page() {
+  const supabase = await createClient();
+
   const { data, error } = await supabase
     .from('plants')
     .select('id, name, latin, category, note, health, image_path')
