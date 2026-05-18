@@ -359,6 +359,17 @@ body {
   .plant-grid {
     grid-template-columns: 1fr;
   }
+  .card {
+    flex-direction: column;
+  }
+  .card-img {
+    width: 100%;
+    min-width: unset;
+    height: 200px;
+  }
+  .card-body {
+    padding: 14px 20px 14px 16px;
+  }
 }
 
 /* ── Feedback section ── */
