@@ -32,8 +32,8 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
     setLocalPlants((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
   }
 
-  function handleNoteUpdated(id: number, note: string) {
-    setLocalPlants((prev) => prev.map((p) => (p.id === id ? { ...p, note } : p)));
+  function handleFeedbackUpdated(id: number, feedback: string) {
+    setLocalPlants((prev) => prev.map((p) => (p.id === id ? { ...p, feedback } : p)));
   }
 
   function handleDeleted(id: number) {
@@ -97,7 +97,7 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
               plant={plant}
               index={i}
               onEdit={setEditingPlant}
-              onNoteUpdated={handleNoteUpdated}
+              onFeedbackUpdated={handleFeedbackUpdated}
             />
           ))
         )}

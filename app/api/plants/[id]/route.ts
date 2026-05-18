@@ -14,8 +14,22 @@ export async function PATCH(
   if (!user) return Response.json({ error: 'Non autorizzato' }, { status: 401 });
 
   const { id } = await params;
-  const { name, latin, category, note, health } = await request.json();
+  const body = await request.json();
 
+  // feedback-only update
+  if ('feedback' in body && Object.keys(body).length === 1) {
+    const { data, error } = await adminClient
+      .from('plants')
+      .update({ feedback: body.feedback ?? '' })
+      .eq('id', Number(id))
+      .select('id, name, latin, category, note, health, image_path, feedback')
+      .single();
+    if (error) return Response.json({ error: error.message }, { status: 500 });
+    return Response.json({ plant: data });
+  }
+
+  // full-field update
+  const { name, latin, category, note, health } = body;
   if (!name || !latin || !category || !note || !health) {
     return Response.json({ error: 'Campi mancanti' }, { status: 400 });
   }
@@ -30,7 +44,7 @@ export async function PATCH(
     .from('plants')
     .update({ name, latin, category, note, health: health as HealthStatus })
     .eq('id', Number(id))
-    .select('id, name, latin, category, note, health, image_path')
+    .select('id, name, latin, category, note, health, image_path, feedback')
     .single();
 
   if (error) return Response.json({ error: error.message }, { status: 500 });
@@ -46,21 +60,6 @@ export async function DELETE(
   if (!user) return Response.json({ error: 'Non autorizzato' }, { status: 401 });
 
   const { id } = await params;
-
-  const { data: plant } = await adminClient
-    .from('plants')
-    .select('image_path')
-    .eq('id', Number(id))
-    .single();
-
-  if (plant?.image_path?.startsWith('https://')) {
-    const url = new URL(plant.image_path);
-    const pathParts = url.pathname.split('/object/public/plant-photos/');
-    if (pathParts.length === 2) {
-      await adminClient.storage.from('plant-photos').remove([pathParts[1]]);
-    }
-  }
-
   const { error } = await adminClient.from('plants').delete().eq('id', Number(id));
   if (error) return Response.json({ error: error.message }, { status: 500 });
   return Response.json({ ok: true });

@@ -14,33 +14,29 @@ interface Props {
   plant: Plant;
   index: number;
   onEdit: (plant: Plant) => void;
-  onNoteUpdated: (id: number, note: string) => void;
+  onFeedbackUpdated: (id: number, feedback: string) => void;
 }
 
-export default function PlantCard({ plant, index, onEdit, onNoteUpdated }: Props) {
-  const [editingNote, setEditingNote] = useState(false);
-  const [draft, setDraft] = useState(plant.note);
+export default function PlantCard({ plant, index, onEdit, onFeedbackUpdated }: Props) {
+  const [editingFeedback, setEditingFeedback] = useState(false);
+  const [draft, setDraft] = useState(plant.feedback ?? '');
   const [saving, setSaving] = useState(false);
 
-  async function saveNote() {
+  async function saveFeedback() {
     setSaving(true);
     await fetch(`/api/plants/${plant.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: plant.name, latin: plant.latin,
-        category: plant.category, health: plant.health,
-        note: draft,
-      }),
+      body: JSON.stringify({ feedback: draft }),
     });
     setSaving(false);
-    setEditingNote(false);
-    onNoteUpdated(plant.id, draft);
+    setEditingFeedback(false);
+    onFeedbackUpdated(plant.id, draft);
   }
 
-  function cancelNote() {
-    setDraft(plant.note);
-    setEditingNote(false);
+  function cancelFeedback() {
+    setDraft(plant.feedback ?? '');
+    setEditingFeedback(false);
   }
 
   return (
@@ -63,28 +59,31 @@ export default function PlantCard({ plant, index, onEdit, onNoteUpdated }: Props
             <div className="card-id">#{String(plant.id).padStart(2, '0')}</div>
           </div>
           <span className="card-category">{plant.category}</span>
+          <div className="card-note">{plant.note}</div>
 
-          {editingNote ? (
-            <div className="note-edit">
+          {editingFeedback ? (
+            <div className="feedback-edit">
               <textarea
-                className="note-textarea"
+                className="feedback-textarea"
                 rows={3}
+                placeholder="Scrivi un feedback per Claude…"
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
                 autoFocus
               />
-              <div className="note-actions">
-                <button className="btn-note-cancel" onClick={cancelNote}>Annulla</button>
-                <button className="btn-note-save" onClick={saveNote} disabled={saving}>
+              <div className="feedback-actions">
+                <button className="btn-note-cancel" onClick={cancelFeedback}>Annulla</button>
+                <button className="btn-note-save" onClick={saveFeedback} disabled={saving}>
                   {saving ? '…' : 'Salva'}
                 </button>
               </div>
             </div>
-          ) : (
-            <div className="card-note note-clickable" onClick={() => setEditingNote(true)}>
-              {plant.note || <span className="note-placeholder">✏ Aggiungi una nota…</span>}
+          ) : plant.feedback ? (
+            <div className="feedback-display" onClick={() => setEditingFeedback(true)}>
+              <span className="feedback-label">📝 Feedback</span>
+              {plant.feedback}
             </div>
-          )}
+          ) : null}
         </div>
 
         <div className="card-footer">
@@ -92,7 +91,16 @@ export default function PlantCard({ plant, index, onEdit, onNoteUpdated }: Props
             <div className="health-dot" />
             {healthLabel[plant.health]}
           </div>
-          <button className="btn-correct" onClick={() => onEdit(plant)}>Modifica</button>
+          <div className="card-actions">
+            <button
+              className="btn-feedback"
+              onClick={() => setEditingFeedback(true)}
+              title="Aggiungi feedback per Claude"
+            >
+              📝 Feedback
+            </button>
+            <button className="btn-correct" onClick={() => onEdit(plant)}>Modifica</button>
+          </div>
         </div>
       </div>
     </div>

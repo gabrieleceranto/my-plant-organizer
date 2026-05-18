@@ -87,7 +87,7 @@ export default function EditDrawer({ plant, onClose, onSaved }: Props) {
             </div>
           </div>
           <div className="form-field">
-            <label>Note</label>
+            <label>Descrizione</label>
             <textarea rows={4} value={fields.note} onChange={(e) => set('note', e.target.value)} />
           </div>
           {error && <p className="form-error">{error}</p>}

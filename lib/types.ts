@@ -8,6 +8,7 @@ export interface Plant {
   note: string;
   health: HealthStatus;
   image_path: string;
+  feedback?: string;
 }
 
 export interface PlantFields {
