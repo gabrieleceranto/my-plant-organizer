@@ -40,7 +40,8 @@ export default function PlantCard({ plant, index, onEdit, onFeedbackUpdated }: P
   }
 
   return (
-    <div className="card" style={{ animationDelay: `${index * 0.018}s` }}>
+    <div className="card" style={{ animationDelay: `${index * 0.018}s`, position: 'relative' }}>
+      <button className="btn-edit-icon" onClick={() => onEdit(plant)} title="Modifica">✏</button>
       <Image
         className="card-img"
         src={plant.image_path}
@@ -91,16 +92,13 @@ export default function PlantCard({ plant, index, onEdit, onFeedbackUpdated }: P
             <div className="health-dot" />
             {healthLabel[plant.health]}
           </div>
-          <div className="card-actions">
-            <button
-              className="btn-feedback"
-              onClick={() => setEditingFeedback(true)}
-              title="Aggiungi feedback per Claude"
-            >
-              📝 Feedback
-            </button>
-            <button className="btn-correct" onClick={() => onEdit(plant)}>Modifica</button>
-          </div>
+          <button
+            className="btn-feedback"
+            onClick={() => setEditingFeedback(true)}
+            title="Aggiungi feedback per Claude"
+          >
+            📝 Feedback
+          </button>
         </div>
       </div>
     </div>

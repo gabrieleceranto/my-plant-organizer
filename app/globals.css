@@ -427,12 +427,38 @@ body {
   cursor: pointer;
 }
 
-/* ── Card action buttons ── */
-.card-actions {
+/* ── Edit icon (top-right of card) ── */
+.btn-edit-icon {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--green-mid);
+  font-size: 0.85rem;
+  cursor: pointer;
   display: flex;
-  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+  backdrop-filter: blur(2px);
 }
 
+.card:hover .btn-edit-icon {
+  opacity: 1;
+}
+
+.btn-edit-icon:hover {
+  background: white;
+  color: var(--green-dark);
+}
+
+/* ── Feedback button ── */
 .btn-feedback {
   font-size: 0.72rem;
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
@@ -448,25 +474,6 @@ body {
 
 .btn-feedback:hover {
   background: var(--accent);
-  color: white;
-}
-
-/* ── Modifica button ── */
-.btn-correct {
-  font-size: 0.72rem;
-  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  font-weight: 500;
-  padding: 4px 10px;
-  border-radius: 12px;
-  border: 1.5px solid var(--green-mid);
-  color: var(--green-mid);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.btn-correct:hover {
-  background: var(--green-mid);
   color: white;
 }
 
