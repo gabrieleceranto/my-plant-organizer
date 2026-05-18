@@ -40,8 +40,7 @@ export default function PlantCard({ plant, index, onEdit, onFeedbackUpdated }: P
   }
 
   return (
-    <div className="card" style={{ animationDelay: `${index * 0.018}s`, position: 'relative' }}>
-      <button className="btn-edit-icon" onClick={() => onEdit(plant)} title="Modifica">✏</button>
+    <div className="card" style={{ animationDelay: `${index * 0.018}s` }}>
       <Image
         className="card-img"
         src={plant.image_path}
@@ -59,7 +58,10 @@ export default function PlantCard({ plant, index, onEdit, onFeedbackUpdated }: P
             </div>
             <div className="card-id">#{String(plant.id).padStart(2, '0')}</div>
           </div>
-          <span className="card-category">{plant.category}</span>
+          <div className="card-category-row">
+            <span className="card-category">{plant.category}</span>
+            <button className="btn-edit-icon" onClick={() => onEdit(plant)} title="Modifica">✏</button>
+          </div>
           <div className="card-note">{plant.note}</div>
 
           {editingFeedback ? (
