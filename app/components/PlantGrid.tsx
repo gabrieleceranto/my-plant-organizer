@@ -4,8 +4,7 @@ import { useState } from 'react';
 import type { Plant } from '@/lib/types';
 import { filterPlants } from '@/lib/filters';
 import PlantCard from './PlantCard';
-import CorrectionDrawer from './CorrectionDrawer';
-import AddPlantDrawer from './AddPlantDrawer';
+import EditDrawer from './EditDrawer';
 
 const FILTERS = [
   { label: 'Tutte', value: 'all' },
@@ -23,23 +22,18 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
   const [localPlants, setLocalPlants] = useState<Plant[]>(initialPlants);
   const [activeFilter, setActiveFilter] = useState('all');
   const [search, setSearch] = useState('');
-  const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
-  const [showAddDrawer, setShowAddDrawer] = useState(false);
+  const [editingPlant, setEditingPlant] = useState<Plant | null>(null);
 
   const filtered = filterPlants(localPlants, activeFilter, search);
   const warnCount = localPlants.filter((p) => p.health === 'warn').length;
   const badCount = localPlants.filter((p) => p.health === 'bad').length;
 
-  function handlePlantSaved(updated: Plant) {
+  function handleSaved(updated: Plant) {
     setLocalPlants((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
   }
 
-  function handlePlantDeleted(id: number) {
+  function handleDeleted(id: number) {
     setLocalPlants((prev) => prev.filter((p) => p.id !== id));
-  }
-
-  function handlePlantAdded(plant: Plant) {
-    setLocalPlants((prev) => [...prev, plant]);
   }
 
   return (
@@ -87,7 +81,6 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <button className="btn-add" onClick={() => setShowAddDrawer(true)}>+ Aggiungi</button>
       </div>
 
       <div className="plant-grid">
@@ -99,8 +92,8 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
               key={plant.id}
               plant={plant}
               index={i}
-              onCorrect={setSelectedPlant}
-              onDelete={handlePlantDeleted}
+              onEdit={setEditingPlant}
+              onDelete={handleDeleted}
             />
           ))
         )}
@@ -110,18 +103,11 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
         Terrazzo · {localPlants.length} piante catalogate
       </footer>
 
-      {selectedPlant && (
-        <CorrectionDrawer
-          plant={selectedPlant}
-          onClose={() => setSelectedPlant(null)}
-          onSaved={(updated) => { handlePlantSaved(updated); setSelectedPlant(null); }}
-        />
-      )}
-
-      {showAddDrawer && (
-        <AddPlantDrawer
-          onClose={() => setShowAddDrawer(false)}
-          onAdded={handlePlantAdded}
+      {editingPlant && (
+        <EditDrawer
+          plant={editingPlant}
+          onClose={() => setEditingPlant(null)}
+          onSaved={(updated) => { handleSaved(updated); setEditingPlant(null); }}
         />
       )}
     </>

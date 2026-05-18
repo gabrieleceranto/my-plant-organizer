@@ -13,23 +13,18 @@ const healthLabel: Record<string, string> = {
 interface Props {
   plant: Plant;
   index: number;
-  onCorrect: (plant: Plant) => void;
+  onEdit: (plant: Plant) => void;
   onDelete: (id: number) => void;
 }
 
-export default function PlantCard({ plant, index, onCorrect, onDelete }: Props) {
+export default function PlantCard({ plant, index, onEdit, onDelete }: Props) {
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   async function handleDelete() {
     setDeleting(true);
-    try {
-      await fetch(`/api/plants/${plant.id}`, { method: 'DELETE' });
-      onDelete(plant.id);
-    } finally {
-      setDeleting(false);
-      setConfirming(false);
-    }
+    await fetch(`/api/plants/${plant.id}`, { method: 'DELETE' });
+    onDelete(plant.id);
   }
 
   return (
@@ -68,7 +63,7 @@ export default function PlantCard({ plant, index, onCorrect, onDelete }: Props) 
               </div>
             ) : (
               <>
-                <button className="btn-correct" onClick={() => onCorrect(plant)}>Correggi</button>
+                <button className="btn-correct" onClick={() => onEdit(plant)}>Modifica</button>
                 <button className="btn-delete" onClick={() => setConfirming(true)}>🗑</button>
               </>
             )}

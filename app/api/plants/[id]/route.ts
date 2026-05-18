@@ -1,6 +1,9 @@
 import { createClient } from '@/lib/supabase-server';
 import { adminClient } from '@/lib/supabase-admin';
-import { validateCorrectionFields } from '@/lib/chat-utils';
+import type { HealthStatus } from '@/lib/types';
+
+const VALID_HEALTH = new Set(['ok', 'warn', 'bad']);
+const VALID_CATEGORIES = new Set(['Aromatica', 'Succulenta', 'Cactus', 'Fioritura', 'Ortaggio', 'Albero', 'Ornamentale']);
 
 export async function PATCH(
   request: Request,
@@ -11,13 +14,21 @@ export async function PATCH(
   if (!user) return Response.json({ error: 'Non autorizzato' }, { status: 401 });
 
   const { id } = await params;
-  const body = await request.json();
-  const fields = validateCorrectionFields(body);
-  if (!fields) return Response.json({ error: 'Campi non validi' }, { status: 400 });
+  const { name, latin, category, note, health } = await request.json();
+
+  if (!name || !latin || !category || !note || !health) {
+    return Response.json({ error: 'Campi mancanti' }, { status: 400 });
+  }
+  if (!VALID_HEALTH.has(health)) {
+    return Response.json({ error: 'Salute non valida' }, { status: 400 });
+  }
+  if (!VALID_CATEGORIES.has(category)) {
+    return Response.json({ error: 'Categoria non valida' }, { status: 400 });
+  }
 
   const { data, error } = await adminClient
     .from('plants')
-    .update(fields)
+    .update({ name, latin, category, note, health: health as HealthStatus })
     .eq('id', Number(id))
     .select('id, name, latin, category, note, health, image_path')
     .single();

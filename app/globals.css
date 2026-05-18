@@ -382,9 +382,7 @@ body {
 
 .btn-delete {
   font-size: 0.72rem;
-  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  font-weight: 500;
-  padding: 4px 10px;
+  padding: 4px 8px;
   border-radius: 12px;
   border: 1.5px solid var(--bad);
   color: var(--bad);
@@ -416,36 +414,10 @@ body {
   background: transparent;
 }
 
-.delete-confirm .confirm-yes {
-  color: var(--bad);
-}
+.confirm-yes { color: var(--bad); }
+.confirm-no  { color: var(--text-light); }
 
-.delete-confirm .confirm-no {
-  color: var(--text-light);
-}
-
-/* ── Add plant button ── */
-.btn-add {
-  margin-left: auto;
-  font-size: 0.8rem;
-  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  font-weight: 500;
-  padding: 6px 16px;
-  border-radius: 20px;
-  border: 1.5px solid var(--accent);
-  color: var(--accent);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-
-.btn-add:hover {
-  background: var(--accent);
-  color: white;
-}
-
-/* ── Drawer overlay ── */
+/* ── Edit drawer ── */
 .drawer-overlay {
   position: fixed;
   inset: 0;
@@ -458,11 +430,11 @@ body {
 
 @keyframes fadeOverlay {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 
 .drawer {
-  width: min(520px, 100vw);
+  width: min(480px, 100vw);
   height: 100%;
   background: var(--card);
   display: flex;
@@ -474,7 +446,7 @@ body {
 
 @keyframes slideIn {
   from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  to   { transform: translateX(0); }
 }
 
 .drawer-header {
@@ -505,9 +477,7 @@ body {
   padding: 0;
 }
 
-.drawer-close:hover {
-  opacity: 1;
-}
+.drawer-close:hover { opacity: 1; }
 
 .drawer-plant-thumb {
   width: 48px;
@@ -517,114 +487,25 @@ body {
   flex-shrink: 0;
 }
 
-/* ── Chat area ── */
-.chat-area {
+.drawer-form {
   flex: 1;
   overflow-y: auto;
-  padding: 16px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  min-height: 0;
-}
-
-.chat-msg {
-  max-width: 88%;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 0.82rem;
-  line-height: 1.5;
-}
-
-.chat-msg.user {
-  align-self: flex-end;
-  background: var(--green-dark);
-  color: white;
-  border-bottom-right-radius: 4px;
-}
-
-.chat-msg.assistant {
-  align-self: flex-start;
-  background: white;
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-bottom-left-radius: 4px;
-}
-
-.chat-msg.streaming {
-  opacity: 0.8;
-}
-
-.chat-input-row {
-  display: flex;
-  gap: 8px;
-  padding: 12px 16px;
-  border-top: 1px solid var(--border);
-  background: white;
-  flex-shrink: 0;
-}
-
-.chat-input {
-  flex: 1;
-  border: 1.5px solid var(--border);
-  border-radius: 20px;
-  padding: 8px 14px;
-  font-size: 0.82rem;
-  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  outline: none;
-  resize: none;
-}
-
-.chat-input:focus {
-  border-color: var(--green-mid);
-}
-
-.chat-send {
-  background: var(--green-dark);
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-size: 0.82rem;
-  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.chat-send:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* ── Correction form ── */
-.correction-form {
-  padding: 14px 16px;
-  border-top: 1px solid var(--border);
-  background: #faf8f5;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.correction-form h3 {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-light);
-  font-weight: 500;
+  gap: 14px;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 10px;
 }
 
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
 }
 
 .form-field label {
@@ -640,7 +521,7 @@ body {
 .form-field textarea {
   border: 1.5px solid var(--border);
   border-radius: 6px;
-  padding: 6px 10px;
+  padding: 7px 10px;
   font-size: 0.82rem;
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
   outline: none;
@@ -648,21 +529,23 @@ body {
   color: var(--text);
 }
 
-.form-field textarea {
-  resize: vertical;
-  min-height: 56px;
-}
+.form-field textarea { resize: vertical; }
 
 .form-field input:focus,
 .form-field select:focus,
-.form-field textarea:focus {
-  border-color: var(--green-mid);
+.form-field textarea:focus { border-color: var(--green-mid); }
+
+.form-error {
+  font-size: 0.78rem;
+  color: var(--bad);
+  margin: 0;
 }
 
 .form-actions {
   display: flex;
   gap: 8px;
   justify-content: flex-end;
+  padding-top: 4px;
 }
 
 .btn-save {
@@ -670,61 +553,24 @@ body {
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 8px 20px;
+  padding: 9px 22px;
   font-size: 0.82rem;
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
   font-weight: 500;
   cursor: pointer;
 }
 
-.btn-save:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+.btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btn-cancel {
   background: transparent;
   color: var(--text-light);
   border: 1.5px solid var(--border);
   border-radius: 8px;
-  padding: 8px 16px;
+  padding: 9px 16px;
   font-size: 0.82rem;
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
   cursor: pointer;
-}
-
-/* ── Add plant drawer ── */
-.upload-zone {
-  border: 2px dashed var(--border);
-  border-radius: 10px;
-  padding: 24px;
-  text-align: center;
-  cursor: pointer;
-  color: var(--text-light);
-  font-size: 0.82rem;
-  transition: border-color 0.15s;
-  background: white;
-}
-
-.upload-zone:hover,
-.upload-zone.drag-over {
-  border-color: var(--green-mid);
-  color: var(--green-mid);
-}
-
-.upload-preview {
-  width: 100%;
-  max-height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
-  display: block;
-}
-
-.identifying-label {
-  font-size: 0.78rem;
-  color: var(--green-mid);
-  text-align: center;
-  padding: 6px 0;
 }
 
 /* ── Logout button ── */
