@@ -26,6 +26,11 @@
   padding: 0;
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 body {
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
   background: var(--bg);
@@ -135,6 +140,7 @@ body {
 
 .search-wrap {
   margin-left: auto;
+  min-width: 0;
 }
 
 .search-wrap input {
@@ -143,7 +149,7 @@ body {
   padding: 5px 14px;
   font-size: 0.82rem;
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  width: 200px;
+  width: min(200px, 100%);
   outline: none;
   color: var(--text);
   background: #faf8f5;
