@@ -642,6 +642,40 @@ body {
   cursor: pointer;
 }
 
+/* ── Mobile responsive ── */
+@media (max-width: 600px) {
+  .site-header {
+    padding: 20px 16px 16px;
+    gap: 12px;
+  }
+
+  .site-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .header-stats {
+    gap: 14px;
+  }
+
+  .controls {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+
+  .filter-btn {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+  }
+
+  .search-wrap {
+    width: 100%;
+  }
+
+  .search-wrap input {
+    width: 100%;
+  }
+}
+
 /* ── Logout button ── */
 .btn-logout {
   background: none;
