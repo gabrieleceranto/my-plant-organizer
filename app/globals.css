@@ -355,13 +355,72 @@ body {
   }
 }
 
-/* ── Card action buttons ── */
-.card-actions {
-  display: flex;
-  gap: 6px;
-  margin-left: auto;
+/* ── Note inline editing ── */
+.note-clickable {
+  cursor: text;
+  min-height: 1.4em;
 }
 
+.note-clickable:hover {
+  color: var(--green-mid);
+}
+
+.note-placeholder {
+  color: var(--border);
+  font-style: italic;
+  font-size: 0.78rem;
+}
+
+.note-edit {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.note-textarea {
+  border: 1.5px solid var(--green-mid);
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 0.8rem;
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  outline: none;
+  resize: vertical;
+  width: 100%;
+  color: var(--text);
+}
+
+.note-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.btn-note-save {
+  background: var(--green-dark);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  cursor: pointer;
+}
+
+.btn-note-save:disabled { opacity: 0.5; }
+
+.btn-note-cancel {
+  background: transparent;
+  color: var(--text-light);
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  cursor: pointer;
+}
+
+/* ── Modifica button ── */
 .btn-correct {
   font-size: 0.72rem;
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
@@ -379,43 +438,6 @@ body {
   background: var(--green-mid);
   color: white;
 }
-
-.btn-delete {
-  font-size: 0.72rem;
-  padding: 4px 8px;
-  border-radius: 12px;
-  border: 1.5px solid var(--bad);
-  color: var(--bad);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.btn-delete:hover {
-  background: var(--bad);
-  color: white;
-}
-
-.delete-confirm {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  font-size: 0.72rem;
-  color: var(--bad);
-}
-
-.delete-confirm button {
-  font-size: 0.72rem;
-  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  padding: 3px 9px;
-  border-radius: 10px;
-  cursor: pointer;
-  border: 1.5px solid currentColor;
-  background: transparent;
-}
-
-.confirm-yes { color: var(--bad); }
-.confirm-no  { color: var(--text-light); }
 
 /* ── Edit drawer ── */
 .drawer-overlay {

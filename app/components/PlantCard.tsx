@@ -14,17 +14,33 @@ interface Props {
   plant: Plant;
   index: number;
   onEdit: (plant: Plant) => void;
-  onDelete: (id: number) => void;
+  onNoteUpdated: (id: number, note: string) => void;
 }
 
-export default function PlantCard({ plant, index, onEdit, onDelete }: Props) {
-  const [confirming, setConfirming] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+export default function PlantCard({ plant, index, onEdit, onNoteUpdated }: Props) {
+  const [editingNote, setEditingNote] = useState(false);
+  const [draft, setDraft] = useState(plant.note);
+  const [saving, setSaving] = useState(false);
 
-  async function handleDelete() {
-    setDeleting(true);
-    await fetch(`/api/plants/${plant.id}`, { method: 'DELETE' });
-    onDelete(plant.id);
+  async function saveNote() {
+    setSaving(true);
+    await fetch(`/api/plants/${plant.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: plant.name, latin: plant.latin,
+        category: plant.category, health: plant.health,
+        note: draft,
+      }),
+    });
+    setSaving(false);
+    setEditingNote(false);
+    onNoteUpdated(plant.id, draft);
+  }
+
+  function cancelNote() {
+    setDraft(plant.note);
+    setEditingNote(false);
   }
 
   return (
@@ -47,27 +63,36 @@ export default function PlantCard({ plant, index, onEdit, onDelete }: Props) {
             <div className="card-id">#{String(plant.id).padStart(2, '0')}</div>
           </div>
           <span className="card-category">{plant.category}</span>
-          <div className="card-note">{plant.note}</div>
+
+          {editingNote ? (
+            <div className="note-edit">
+              <textarea
+                className="note-textarea"
+                rows={3}
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                autoFocus
+              />
+              <div className="note-actions">
+                <button className="btn-note-cancel" onClick={cancelNote}>Annulla</button>
+                <button className="btn-note-save" onClick={saveNote} disabled={saving}>
+                  {saving ? '…' : 'Salva'}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="card-note note-clickable" onClick={() => setEditingNote(true)}>
+              {plant.note || <span className="note-placeholder">✏ Aggiungi una nota…</span>}
+            </div>
+          )}
         </div>
+
         <div className="card-footer">
           <div className={`health-badge ${plant.health}`}>
             <div className="health-dot" />
             {healthLabel[plant.health]}
           </div>
-          <div className="card-actions">
-            {confirming ? (
-              <div className="delete-confirm">
-                <span>Elimina?</span>
-                <button className="confirm-yes" onClick={handleDelete} disabled={deleting}>Sì</button>
-                <button className="confirm-no" onClick={() => setConfirming(false)}>No</button>
-              </div>
-            ) : (
-              <>
-                <button className="btn-correct" onClick={() => onEdit(plant)}>Modifica</button>
-                <button className="btn-delete" onClick={() => setConfirming(true)}>🗑</button>
-              </>
-            )}
-          </div>
+          <button className="btn-correct" onClick={() => onEdit(plant)}>Modifica</button>
         </div>
       </div>
     </div>
