@@ -3,11 +3,11 @@ import { filterPlants } from './filters';
 import type { Plant } from './types';
 
 const plants: Plant[] = [
-  { id: 1,  name: 'Echeveria',   latin: 'Echeveria sp.',      category: 'Succulenta',  note: 'Bella rosetta',    health: 'ok'   },
-  { id: 2,  name: 'Basilico',    latin: 'Ocimum basilicum',   category: 'Aromatica',   note: 'Erba da cucina',   health: 'ok'   },
-  { id: 3,  name: 'Dracena',     latin: 'Dracaena compacta',  category: 'Ornamentale', note: 'Foglie scure',     health: 'warn' },
-  { id: 4,  name: 'Pomodoro',    latin: 'Solanum lycopersicum',category: 'Ortaggio',   note: 'In frutto',        health: 'bad'  },
-  { id: 5,  name: 'Menta',       latin: 'Mentha spicata',     category: 'Aromatica',   note: 'Pianta aromatica', health: 'bad'  },
+  { id: 1,  name: 'Echeveria',   latin: 'Echeveria sp.',       category: 'Succulenta',  note: 'Bella rosetta',    health: 'ok',   image_path: '' },
+  { id: 2,  name: 'Basilico',    latin: 'Ocimum basilicum',    category: 'Aromatica',   note: 'Erba da cucina',   health: 'ok',   image_path: '' },
+  { id: 3,  name: 'Dracena',     latin: 'Dracaena compacta',   category: 'Ornamentale', note: 'Foglie scure',     health: 'warn', image_path: '' },
+  { id: 4,  name: 'Pomodoro',    latin: 'Solanum lycopersicum', category: 'Ortaggio',   note: 'In frutto',        health: 'bad',  image_path: '' },
+  { id: 5,  name: 'Menta',       latin: 'Mentha spicata',      category: 'Aromatica',   note: 'Pianta aromatica', health: 'bad',  image_path: '' },
 ];
 
 describe('filterPlants', () => {
