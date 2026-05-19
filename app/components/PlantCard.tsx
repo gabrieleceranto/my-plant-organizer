@@ -21,6 +21,7 @@ export default function PlantCard({ plant, index, onEdit, onFeedbackUpdated }: P
   const [editingFeedback, setEditingFeedback] = useState(false);
   const [draft, setDraft] = useState(plant.feedback ?? '');
   const [saving, setSaving] = useState(false);
+  const [lightbox, setLightbox] = useState(false);
 
   async function saveFeedback() {
     setSaving(true);
@@ -48,7 +49,21 @@ export default function PlantCard({ plant, index, onEdit, onFeedbackUpdated }: P
         width={180}
         height={180}
         loading="lazy"
+        onClick={() => setLightbox(true)}
+        style={{ cursor: 'zoom-in' }}
       />
+      {lightbox && (
+        <div className="lightbox-overlay" onClick={() => setLightbox(false)}>
+          <Image
+            className="lightbox-img"
+            src={plant.image_path}
+            alt={plant.name}
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+          <button className="lightbox-close" onClick={() => setLightbox(false)}>✕</button>
+        </div>
+      )}
       <div className="card-body">
         <div>
           <div className="card-top">
