@@ -9,7 +9,7 @@ export default async function Page() {
 
   const { data, error } = await supabase
     .from('plants')
-    .select('id, name, latin, category, note, health, image_path, feedback')
+    .select('id, name, latin, category, note, health, image_path, feedback, plant_synergies(id, synergy_type, partner_name, description, how_to_use)')
     .order('id');
 
   if (error) {

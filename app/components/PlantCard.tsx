@@ -2,12 +2,23 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import type { Plant } from '@/lib/types';
+import type { Plant, SynergyType } from '@/lib/types';
 
 const healthLabel: Record<string, string> = {
   ok: 'Sana',
   warn: 'Attenzione',
   bad: 'Urgente',
+};
+
+const synergyConfig: Record<SynergyType, { label: string; className: string }> = {
+  microclima:    { label: 'Microclima',    className: 'syn-microclima' },
+  nutrienti:     { label: 'Nutrienti',     className: 'syn-nutrienti' },
+  repellente:    { label: 'Repellente',    className: 'syn-repellente' },
+  impollinatori: { label: 'Impollinatori', className: 'syn-impollinatori' },
+  antisettico:   { label: 'Antisettico',   className: 'syn-antisettico' },
+  accumulatore:  { label: 'Accumulatore',  className: 'syn-accumulatore' },
+  strutturale:   { label: 'Strutturale',   className: 'syn-strutturale' },
+  etilene:       { label: 'Etilene',       className: 'syn-etilene' },
 };
 
 interface Props {
@@ -22,6 +33,9 @@ export default function PlantCard({ plant, index, onEdit, onFeedbackUpdated }: P
   const [draft, setDraft] = useState(plant.feedback ?? '');
   const [saving, setSaving] = useState(false);
   const [lightbox, setLightbox] = useState(false);
+  const [synergiesOpen, setSynergiesOpen] = useState(false);
+
+  const synergies = plant.plant_synergies ?? [];
 
   async function saveFeedback() {
     setSaving(true);
@@ -78,6 +92,32 @@ export default function PlantCard({ plant, index, onEdit, onFeedbackUpdated }: P
             <button className="btn-edit-icon" onClick={() => onEdit(plant)} title="Modifica">✏</button>
           </div>
           <div className="card-note">{plant.note}</div>
+
+          {synergies.length > 0 && (
+            <div className="synergy-section">
+              <button className="synergy-toggle" onClick={() => setSynergiesOpen(o => !o)}>
+                <span>Sinergie ({synergies.length})</span>
+                <span className="synergy-toggle-arrow">{synergiesOpen ? '▲' : '▼'}</span>
+              </button>
+              {synergiesOpen && (
+                <div className="synergy-list">
+                  {synergies.map(s => {
+                    const cfg = synergyConfig[s.synergy_type];
+                    return (
+                      <div key={s.id} className="synergy-item">
+                        <div className="synergy-item-header">
+                          <span className={`synergy-badge ${cfg.className}`}>{cfg.label}</span>
+                          <span className="synergy-partner">{s.partner_name}</span>
+                        </div>
+                        <p className="synergy-desc">{s.description}</p>
+                        <p className="synergy-how">{s.how_to_use}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
 
           {editingFeedback ? (
             <div className="feedback-edit">

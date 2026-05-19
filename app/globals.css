@@ -497,6 +497,98 @@ body {
   color: white;
 }
 
+/* ── Sinergie ── */
+.synergy-section {
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+.synergy-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--green-mid);
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+}
+
+.synergy-toggle-arrow {
+  font-size: 0.6rem;
+  opacity: 0.7;
+}
+
+.synergy-list {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.synergy-item {
+  background: #f8faf8;
+  border-left: 3px solid var(--green-light);
+  border-radius: 0 6px 6px 0;
+  padding: 7px 10px;
+}
+
+.synergy-item-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.synergy-badge {
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 3px;
+  padding: 2px 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.syn-microclima    { background: #dbeafe; color: #1d4ed8; }
+.syn-nutrienti     { background: #dcfce7; color: #15803d; }
+.syn-repellente    { background: #ffedd5; color: #c2410c; }
+.syn-impollinatori { background: #fef9c3; color: #a16207; }
+.syn-antisettico   { background: #ede9fe; color: #6d28d9; }
+.syn-accumulatore  { background: #fef3c7; color: #92400e; }
+.syn-strutturale   { background: #f3f4f6; color: #374151; }
+.syn-etilene       { background: #fce7f3; color: #be185d; }
+
+.synergy-partner {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.synergy-desc {
+  font-size: 0.76rem;
+  color: var(--text-light);
+  line-height: 1.4;
+  margin: 0 0 4px;
+}
+
+.synergy-how {
+  font-size: 0.72rem;
+  color: var(--green-mid);
+  font-weight: 500;
+  line-height: 1.4;
+  margin: 0;
+}
+
 /* ── Lightbox ── */
 .lightbox-overlay {
   position: fixed;
