@@ -783,6 +783,182 @@ body {
   cursor: pointer;
 }
 
+/* ── Abbinamenti button ── */
+.btn-abbinamenti {
+  background: none;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.9);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-abbinamenti:hover {
+  border-color: white;
+  color: white;
+}
+
+/* ── Abbinamenti page ── */
+.abbinamenti-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.abb-section-title {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--green-dark);
+  margin-bottom: 6px;
+}
+
+.abb-section-desc {
+  font-size: 0.84rem;
+  color: var(--text-light);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.abb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+  gap: 16px;
+}
+
+.abb-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: box-shadow 0.15s;
+}
+
+.abb-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.09);
+}
+
+.abb-card-type {
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 3px;
+  padding: 2px 7px;
+  align-self: flex-start;
+}
+
+.abb-type-vaso  { background: #dcfce7; color: #15803d; }
+.abb-type-vicine { background: #dbeafe; color: #1d4ed8; }
+
+.abb-card-name {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--green-dark);
+  margin: 0;
+}
+
+.abb-card-desc {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.abb-plants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.abb-plant-tag {
+  font-size: 0.72rem;
+  font-weight: 500;
+  border-radius: 20px;
+  padding: 3px 10px;
+  color: var(--text);
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* ── Light grid ── */
+.light-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.light-col {
+  border-radius: 10px;
+  padding: 18px;
+  border: 1px solid var(--border);
+}
+
+.light-col-pieno_sole     { background: #fffbeb; }
+.light-col-parziale       { background: #f0fdf4; }
+.light-col-luce_indiretta { background: #f0f9ff; }
+
+.light-col-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.light-icon { font-size: 1.4rem; }
+
+.light-label {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--green-dark);
+}
+
+.light-desc {
+  font-size: 0.7rem;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+
+.light-plants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.light-plant-tag {
+  font-size: 0.7rem;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2px 9px;
+  color: var(--text);
+}
+
+@media (max-width: 600px) {
+  .abbinamenti-main {
+    padding: 20px 16px;
+    gap: 36px;
+  }
+  .light-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Logout button ── */
 .btn-logout {
   background: none;

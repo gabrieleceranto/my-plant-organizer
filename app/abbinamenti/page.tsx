@@ -1,0 +1,172 @@
+import { createClient } from '@/lib/supabase-server';
+
+type LightLevel = 'pieno_sole' | 'parziale' | 'luce_indiretta';
+
+interface GroupPlant {
+  id: number;
+  name: string;
+  category: string;
+}
+
+interface PlantGroup {
+  id: number;
+  name: string;
+  description: string | null;
+  group_type: 'stesso_vaso' | 'vicine';
+  plant_group_members: { plants: GroupPlant }[];
+}
+
+interface PlantLight {
+  id: number;
+  name: string;
+  light: LightLevel;
+}
+
+const lightConfig: Record<LightLevel, { label: string; icon: string; desc: string }> = {
+  pieno_sole:     { label: 'Pieno sole',     icon: '☀️', desc: '6+ ore di sole diretto' },
+  parziale:       { label: 'Parziale',       icon: '⛅', desc: '3–6 ore di sole' },
+  luce_indiretta: { label: 'Luce indiretta', icon: '🌤', desc: 'Ombra luminosa o controluce' },
+};
+
+const categoryColor: Record<string, string> = {
+  Succulenta: '#dcfce7',
+  Cactus: '#fef9c3',
+  Ornamentale: '#dbeafe',
+  Aromatica: '#f0fdf4',
+  Fioritura: '#fce7f3',
+  Ortaggio: '#fff7ed',
+  'Albero da frutto': '#fef3c7',
+  Rampicante: '#ede9fe',
+  Arbusto: '#f3f4f6',
+  Sconosciuta: '#f9fafb',
+};
+
+function categoryBg(category: string) {
+  for (const [key, color] of Object.entries(categoryColor)) {
+    if (category.includes(key)) return color;
+  }
+  return '#f3f4f6';
+}
+
+export default async function AbbinnamentiPage() {
+  const supabase = await createClient();
+
+  const [{ data: groupsData }, { data: plantsData }] = await Promise.all([
+    supabase
+      .from('plant_groups')
+      .select('id, name, description, group_type, plant_group_members(plants(id, name, category))')
+      .order('group_type')
+      .order('id'),
+    supabase
+      .from('plants')
+      .select('id, name, light')
+      .order('name'),
+  ]);
+
+  const groups = (groupsData ?? []) as unknown as PlantGroup[];
+  const plants = (plantsData ?? []) as PlantLight[];
+
+  const stessoVaso = groups.filter((g) => g.group_type === 'stesso_vaso');
+  const vicine = groups.filter((g) => g.group_type === 'vicine');
+
+  const byLight: Record<LightLevel, PlantLight[]> = {
+    pieno_sole: plants.filter((p) => p.light === 'pieno_sole'),
+    parziale: plants.filter((p) => p.light === 'parziale'),
+    luce_indiretta: plants.filter((p) => p.light === 'luce_indiretta'),
+  };
+
+  return (
+    <>
+      <header className="site-header">
+        <h1>
+          Abbinamenti & Luce
+          <span>Gruppi, sinergie e requisiti luminosi</span>
+        </h1>
+        <a href="/" className="btn-logout">← Catalogo</a>
+      </header>
+
+      <main className="abbinamenti-main">
+
+        {/* Stesso vaso */}
+        <section className="abb-section">
+          <h2 className="abb-section-title">Nello stesso vaso</h2>
+          <p className="abb-section-desc">Piante con esigenze compatibili e sinergie attive — abbinale nello stesso contenitore.</p>
+          <div className="abb-grid">
+            {stessoVaso.map((g) => (
+              <div key={g.id} className="abb-card">
+                <div className="abb-card-type abb-type-vaso">stesso vaso</div>
+                <h3 className="abb-card-name">{g.name}</h3>
+                {g.description && <p className="abb-card-desc">{g.description}</p>}
+                <div className="abb-plants">
+                  {g.plant_group_members.map((m) => (
+                    <span
+                      key={m.plants.id}
+                      className="abb-plant-tag"
+                      style={{ background: categoryBg(m.plants.category) }}
+                    >
+                      {m.plants.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Vicine */}
+        <section className="abb-section">
+          <h2 className="abb-section-title">Da tenere vicine</h2>
+          <p className="abb-section-desc">Non necessariamente nello stesso vaso — la prossimità è sufficiente per attivare la sinergia.</p>
+          <div className="abb-grid">
+            {vicine.map((g) => (
+              <div key={g.id} className="abb-card">
+                <div className="abb-card-type abb-type-vicine">vicine</div>
+                <h3 className="abb-card-name">{g.name}</h3>
+                {g.description && <p className="abb-card-desc">{g.description}</p>}
+                <div className="abb-plants">
+                  {g.plant_group_members.map((m) => (
+                    <span
+                      key={m.plants.id}
+                      className="abb-plant-tag"
+                      style={{ background: categoryBg(m.plants.category) }}
+                    >
+                      {m.plants.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Luce */}
+        <section className="abb-section">
+          <h2 className="abb-section-title">Per esigenza di luce</h2>
+          <p className="abb-section-desc">Piante con lo stesso requisito luminoso — posizionali nella stessa zona del terrazzo.</p>
+          <div className="light-grid">
+            {(Object.entries(lightConfig) as [LightLevel, typeof lightConfig[LightLevel]][]).map(([key, cfg]) => (
+              <div key={key} className={`light-col light-col-${key}`}>
+                <div className="light-col-header">
+                  <span className="light-icon">{cfg.icon}</span>
+                  <div>
+                    <div className="light-label">{cfg.label}</div>
+                    <div className="light-desc">{cfg.desc}</div>
+                  </div>
+                </div>
+                <div className="light-plants">
+                  {byLight[key].map((p) => (
+                    <span key={p.id} className="light-plant-tag">{p.name}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        Terrazzo · abbinamenti basati su sinergie reali
+      </footer>
+    </>
+  );
+}

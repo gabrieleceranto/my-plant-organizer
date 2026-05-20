@@ -60,6 +60,7 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
             <div className="stat-num" style={{ color: '#e07070' }}>{badCount}</div>
             <div className="stat-label">urgenti</div>
           </div>
+          <a href="/abbinamenti" className="btn-abbinamenti">Abbinamenti</a>
           <form action="/api/auth/logout" method="POST">
             <button type="submit" className="btn-logout">Esci</button>
           </form>
