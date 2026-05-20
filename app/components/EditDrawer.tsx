@@ -10,6 +10,11 @@ const HEALTH_OPTIONS = [
   { value: 'warn', label: 'Attenzione' },
   { value: 'bad', label: 'Urgente' },
 ];
+const LIGHT_OPTIONS = [
+  { value: 'pieno_sole', label: 'Pieno sole (6+ ore)' },
+  { value: 'parziale', label: 'Parziale (3–6 ore)' },
+  { value: 'luce_indiretta', label: 'Luce indiretta' },
+];
 
 interface Props {
   plant: Plant;
@@ -24,6 +29,8 @@ export default function EditDrawer({ plant, onClose, onSaved }: Props) {
     category: plant.category,
     note: plant.note,
     health: plant.health,
+    light: plant.light,
+    root_depth_cm: plant.root_depth_cm,
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -84,6 +91,26 @@ export default function EditDrawer({ plant, onClose, onSaved }: Props) {
                   <option key={value} value={value}>{label}</option>
                 ))}
               </select>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-field">
+              <label>Esposizione alla luce</label>
+              <select value={fields.light} onChange={(e) => set('light', e.target.value)}>
+                {LIGHT_OPTIONS.map(({ value, label }) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
+              </select>
+            </div>
+            <div className="form-field">
+              <label>Profondità radici (cm)</label>
+              <input
+                type="number"
+                min={5}
+                max={100}
+                value={fields.root_depth_cm}
+                onChange={(e) => setFields((f) => ({ ...f, root_depth_cm: Number(e.target.value) }))}
+              />
             </div>
           </div>
           <div className="form-field">

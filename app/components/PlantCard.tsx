@@ -2,12 +2,18 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import type { Plant, SynergyType } from '@/lib/types';
+import type { Plant, SynergyType, LightLevel } from '@/lib/types';
 
 const healthLabel: Record<string, string> = {
   ok: 'Sana',
   warn: 'Attenzione',
   bad: 'Urgente',
+};
+
+const lightConfig: Record<LightLevel, { label: string; className: string }> = {
+  pieno_sole:     { label: 'Pieno sole',     className: 'light-pieno' },
+  parziale:       { label: 'Parziale',       className: 'light-parz' },
+  luce_indiretta: { label: 'Luce indiretta', className: 'light-indir' },
 };
 
 const synergyConfig: Record<SynergyType, { label: string; className: string }> = {
@@ -90,6 +96,12 @@ export default function PlantCard({ plant, index, onEdit, onFeedbackUpdated }: P
           <div className="card-category-row">
             <span className="card-category">{plant.category}</span>
             <button className="btn-edit-icon" onClick={() => onEdit(plant)} title="Modifica">✏</button>
+          </div>
+          <div className="card-meta">
+            <span className={`card-light-badge ${lightConfig[plant.light].className}`}>
+              {lightConfig[plant.light].label}
+            </span>
+            <span className="card-depth-badge">{plant.root_depth_cm}cm</span>
           </div>
           <div className="card-note">{plant.note}</div>
 

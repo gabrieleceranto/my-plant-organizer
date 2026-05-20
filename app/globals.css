@@ -263,6 +263,34 @@ body {
   white-space: nowrap;
 }
 
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.card-light-badge {
+  font-size: 0.65rem;
+  font-weight: 500;
+  border-radius: 3px;
+  padding: 2px 6px;
+}
+
+.light-pieno { background: #fef9c3; color: #a16207; }
+.light-parz  { background: #dcfce7; color: #15803d; }
+.light-indir { background: #dbeafe; color: #1d4ed8; }
+
+.card-depth-badge {
+  font-size: 0.65rem;
+  color: var(--text-light);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 2px 6px;
+}
+
 .card-note {
   font-size: 0.8rem;
   color: var(--text-light);
