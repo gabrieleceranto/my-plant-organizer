@@ -849,6 +849,28 @@ body {
   box-shadow: 0 4px 20px rgba(0,0,0,0.09);
 }
 
+.abb-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.abb-light-badge {
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--text-light);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.abb-light-mixed {
+  font-style: italic;
+}
+
 .abb-card-type {
   font-size: 0.62rem;
   font-weight: 600;

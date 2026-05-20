@@ -6,6 +6,7 @@ interface GroupPlant {
   id: number;
   name: string;
   category: string;
+  light: LightLevel;
 }
 
 interface PlantGroup {
@@ -54,7 +55,7 @@ export default async function AbbinnamentiPage() {
   const [{ data: groupsData }, { data: plantsData }] = await Promise.all([
     supabase
       .from('plant_groups')
-      .select('id, name, description, group_type, plant_group_members(plants(id, name, category))')
+      .select('id, name, description, group_type, plant_group_members(plants(id, name, category, light))')
       .order('group_type')
       .order('id'),
     supabase
@@ -90,52 +91,77 @@ export default async function AbbinnamentiPage() {
         {/* Stesso vaso */}
         <section className="abb-section">
           <h2 className="abb-section-title">Nello stesso vaso</h2>
-          <p className="abb-section-desc">Piante con esigenze compatibili e sinergie attive — abbinale nello stesso contenitore.</p>
+          <p className="abb-section-desc">Piante con stessa esigenza di luce, esigenze idriche compatibili e sinergie attive.</p>
           <div className="abb-grid">
-            {stessoVaso.map((g) => (
-              <div key={g.id} className="abb-card">
-                <div className="abb-card-type abb-type-vaso">stesso vaso</div>
-                <h3 className="abb-card-name">{g.name}</h3>
-                {g.description && <p className="abb-card-desc">{g.description}</p>}
-                <div className="abb-plants">
-                  {g.plant_group_members.map((m) => (
-                    <span
-                      key={m.plants.id}
-                      className="abb-plant-tag"
-                      style={{ background: categoryBg(m.plants.category) }}
-                    >
-                      {m.plants.name}
-                    </span>
-                  ))}
+            {stessoVaso.map((g) => {
+              const lights = [...new Set(g.plant_group_members.map((m) => m.plants.light))];
+              const sharedLight = lights.length === 1 ? lights[0] as LightLevel : null;
+              return (
+                <div key={g.id} className="abb-card">
+                  <div className="abb-card-header">
+                    <span className="abb-card-type abb-type-vaso">stesso vaso</span>
+                    {sharedLight && (
+                      <span className="abb-light-badge">
+                        {lightConfig[sharedLight].icon} {lightConfig[sharedLight].label}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="abb-card-name">{g.name}</h3>
+                  {g.description && <p className="abb-card-desc">{g.description}</p>}
+                  <div className="abb-plants">
+                    {g.plant_group_members.map((m) => (
+                      <span
+                        key={m.plants.id}
+                        className="abb-plant-tag"
+                        style={{ background: categoryBg(m.plants.category) }}
+                      >
+                        {m.plants.name}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
         {/* Vicine */}
         <section className="abb-section">
           <h2 className="abb-section-title">Da tenere vicine</h2>
-          <p className="abb-section-desc">Non necessariamente nello stesso vaso — la prossimità è sufficiente per attivare la sinergia.</p>
+          <p className="abb-section-desc">La prossimità attiva la sinergia — non devono condividere il vaso né la stessa esposizione.</p>
           <div className="abb-grid">
-            {vicine.map((g) => (
-              <div key={g.id} className="abb-card">
-                <div className="abb-card-type abb-type-vicine">vicine</div>
-                <h3 className="abb-card-name">{g.name}</h3>
-                {g.description && <p className="abb-card-desc">{g.description}</p>}
-                <div className="abb-plants">
-                  {g.plant_group_members.map((m) => (
-                    <span
-                      key={m.plants.id}
-                      className="abb-plant-tag"
-                      style={{ background: categoryBg(m.plants.category) }}
-                    >
-                      {m.plants.name}
-                    </span>
-                  ))}
+            {vicine.map((g) => {
+              const lights = [...new Set(g.plant_group_members.map((m) => m.plants.light))];
+              const sharedLight = lights.length === 1 ? lights[0] as LightLevel : null;
+              return (
+                <div key={g.id} className="abb-card">
+                  <div className="abb-card-header">
+                    <span className="abb-card-type abb-type-vicine">vicine</span>
+                    {sharedLight ? (
+                      <span className="abb-light-badge">
+                        {lightConfig[sharedLight].icon} {lightConfig[sharedLight].label}
+                      </span>
+                    ) : (
+                      <span className="abb-light-badge abb-light-mixed">posizioni diverse</span>
+                    )}
+                  </div>
+                  <h3 className="abb-card-name">{g.name}</h3>
+                  {g.description && <p className="abb-card-desc">{g.description}</p>}
+                  <div className="abb-plants">
+                    {g.plant_group_members.map((m) => (
+                      <span
+                        key={m.plants.id}
+                        className="abb-plant-tag"
+                        style={{ background: categoryBg(m.plants.category) }}
+                        title={lightConfig[m.plants.light].label}
+                      >
+                        {lightConfig[m.plants.light].icon} {m.plants.name}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
