@@ -7,6 +7,7 @@ interface GroupPlant {
   name: string;
   category: string;
   light: LightLevel;
+  root_depth_cm: number;
 }
 
 interface PlantGroup {
@@ -55,7 +56,7 @@ export default async function AbbinnamentiPage() {
   const [{ data: groupsData }, { data: plantsData }] = await Promise.all([
     supabase
       .from('plant_groups')
-      .select('id, name, description, group_type, plant_group_members(plants(id, name, category, light))')
+      .select('id, name, description, group_type, plant_group_members(plants(id, name, category, light, root_depth_cm))')
       .order('group_type')
       .order('id'),
     supabase
@@ -96,8 +97,10 @@ export default async function AbbinnamentiPage() {
             {stessoVaso.map((g) => {
               const lights = [...new Set(g.plant_group_members.map((m) => m.plants.light))];
               const sharedLight = lights.length === 1 ? lights[0] as LightLevel : null;
+              const maxDepth = Math.max(...g.plant_group_members.map((m) => m.plants.root_depth_cm));
+              const fits30 = maxDepth <= 30;
               return (
-                <div key={g.id} className="abb-card">
+                <div key={g.id} className={`abb-card${fits30 ? '' : ' abb-card-warn'}`}>
                   <div className="abb-card-header">
                     <span className="abb-card-type abb-type-vaso">stesso vaso</span>
                     {sharedLight && (
@@ -105,6 +108,9 @@ export default async function AbbinnamentiPage() {
                         {lightConfig[sharedLight].icon} {lightConfig[sharedLight].label}
                       </span>
                     )}
+                    <span className={`abb-depth-badge ${fits30 ? 'abb-depth-ok' : 'abb-depth-warn'}`}>
+                      {fits30 ? `min. ${maxDepth}cm` : `richiede ${maxDepth}cm`}
+                    </span>
                   </div>
                   <h3 className="abb-card-name">{g.name}</h3>
                   {g.description && <p className="abb-card-desc">{g.description}</p>}
@@ -114,6 +120,7 @@ export default async function AbbinnamentiPage() {
                         key={m.plants.id}
                         className="abb-plant-tag"
                         style={{ background: categoryBg(m.plants.category) }}
+                        title={`${m.plants.root_depth_cm}cm di profondità`}
                       >
                         {m.plants.name}
                       </span>

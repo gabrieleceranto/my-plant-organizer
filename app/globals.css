@@ -871,6 +871,21 @@ body {
   font-style: italic;
 }
 
+.abb-depth-badge {
+  font-size: 0.62rem;
+  font-weight: 600;
+  border-radius: 3px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.abb-depth-ok   { background: #dcfce7; color: #15803d; }
+.abb-depth-warn { background: #fff1f2; color: #be123c; }
+
+.abb-card-warn {
+  border-color: #fecdd3;
+}
+
 .abb-card-type {
   font-size: 0.62rem;
   font-weight: 600;
