@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import type { Plant, SynergyType, LightLevel } from '@/lib/types';
 import PhotoBadge from './PhotoBadge';
@@ -74,17 +75,18 @@ export default function PlantCard({ plant, index, plantsById, onEdit, onFeedback
         onClick={() => setLightbox(true)}
         style={{ cursor: 'zoom-in' }}
       />
-      {lightbox && (
+      {lightbox && typeof window !== 'undefined' && createPortal(
         <div className="lightbox-overlay" onClick={() => setLightbox(false)}>
           <Image
-            className="lightbox-img"
             src={plant.image_path}
             alt={plant.name}
             fill
-            style={{ objectFit: 'contain' }}
+            style={{ objectFit: 'contain', padding: '24px' }}
           />
+          <div className="lightbox-caption">{plant.name}</div>
           <button className="lightbox-close" onClick={() => setLightbox(false)}>✕</button>
-        </div>
+        </div>,
+        document.body
       )}
       <div className="card-body">
         <div>
