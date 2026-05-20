@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import type { Plant } from '@/lib/types';
 import { filterPlants } from '@/lib/filters';
 import PlantCard from './PlantCard';
@@ -25,6 +25,7 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
   const [editingPlant, setEditingPlant] = useState<Plant | null>(null);
 
   const filtered = filterPlants(localPlants, activeFilter, search);
+  const plantsById = useMemo(() => new Map(localPlants.map((p) => [p.id, p])), [localPlants]);
   const warnCount = localPlants.filter((p) => p.health === 'warn').length;
   const badCount = localPlants.filter((p) => p.health === 'bad').length;
 
@@ -97,6 +98,7 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
               key={plant.id}
               plant={plant}
               index={i}
+              plantsById={plantsById}
               onEdit={setEditingPlant}
               onFeedbackUpdated={handleFeedbackUpdated}
             />

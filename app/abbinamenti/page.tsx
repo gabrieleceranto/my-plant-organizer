@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase-server';
+import PhotoBadge from '@/app/components/PhotoBadge';
 
 type LightLevel = 'pieno_sole' | 'parziale' | 'luce_indiretta';
 
@@ -8,6 +9,7 @@ interface GroupPlant {
   category: string;
   light: LightLevel;
   root_depth_cm: number;
+  image_path: string;
 }
 
 interface PlantGroup {
@@ -22,6 +24,7 @@ interface PlantLight {
   id: number;
   name: string;
   light: LightLevel;
+  image_path: string;
 }
 
 const lightConfig: Record<LightLevel, { label: string; icon: string; desc: string }> = {
@@ -56,12 +59,12 @@ export default async function AbbinnamentiPage() {
   const [{ data: groupsData }, { data: plantsData }] = await Promise.all([
     supabase
       .from('plant_groups')
-      .select('id, name, description, group_type, plant_group_members(plants(id, name, category, light, root_depth_cm))')
+      .select('id, name, description, group_type, plant_group_members(plants(id, name, category, light, root_depth_cm, image_path))')
       .order('group_type')
       .order('id'),
     supabase
       .from('plants')
-      .select('id, name, light')
+      .select('id, name, light, image_path')
       .order('name'),
   ]);
 
@@ -116,14 +119,14 @@ export default async function AbbinnamentiPage() {
                   {g.description && <p className="abb-card-desc">{g.description}</p>}
                   <div className="abb-plants">
                     {g.plant_group_members.map((m) => (
-                      <span
+                      <PhotoBadge
                         key={m.plants.id}
+                        name={m.plants.name}
+                        imagePath={m.plants.image_path || null}
                         className="abb-plant-tag"
                         style={{ background: categoryBg(m.plants.category) }}
                         title={`${m.plants.root_depth_cm}cm di profondità`}
-                      >
-                        {m.plants.name}
-                      </span>
+                      />
                     ))}
                   </div>
                 </div>
@@ -156,14 +159,14 @@ export default async function AbbinnamentiPage() {
                   {g.description && <p className="abb-card-desc">{g.description}</p>}
                   <div className="abb-plants">
                     {g.plant_group_members.map((m) => (
-                      <span
+                      <PhotoBadge
                         key={m.plants.id}
+                        name={`${lightConfig[m.plants.light].icon} ${m.plants.name}`}
+                        imagePath={m.plants.image_path || null}
                         className="abb-plant-tag"
                         style={{ background: categoryBg(m.plants.category) }}
                         title={lightConfig[m.plants.light].label}
-                      >
-                        {lightConfig[m.plants.light].icon} {m.plants.name}
-                      </span>
+                      />
                     ))}
                   </div>
                 </div>
@@ -188,7 +191,12 @@ export default async function AbbinnamentiPage() {
                 </div>
                 <div className="light-plants">
                   {byLight[key].map((p) => (
-                    <span key={p.id} className="light-plant-tag">{p.name}</span>
+                    <PhotoBadge
+                      key={p.id}
+                      name={p.name}
+                      imagePath={p.image_path || null}
+                      className="light-plant-tag"
+                    />
                   ))}
                 </div>
               </div>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import type { Plant, SynergyType, LightLevel } from '@/lib/types';
+import PhotoBadge from './PhotoBadge';
 
 const healthLabel: Record<string, string> = {
   ok: 'Sana',
@@ -30,11 +31,12 @@ const synergyConfig: Record<SynergyType, { label: string; className: string }> =
 interface Props {
   plant: Plant;
   index: number;
+  plantsById: Map<number, Plant>;
   onEdit: (plant: Plant) => void;
   onFeedbackUpdated: (id: number, feedback: string) => void;
 }
 
-export default function PlantCard({ plant, index, onEdit, onFeedbackUpdated }: Props) {
+export default function PlantCard({ plant, index, plantsById, onEdit, onFeedbackUpdated }: Props) {
   const [editingFeedback, setEditingFeedback] = useState(false);
   const [draft, setDraft] = useState(plant.feedback ?? '');
   const [saving, setSaving] = useState(false);
@@ -119,7 +121,11 @@ export default function PlantCard({ plant, index, onEdit, onFeedbackUpdated }: P
                       <div key={s.id} className="synergy-item">
                         <div className="synergy-item-header">
                           <span className={`synergy-badge ${cfg.className}`}>{cfg.label}</span>
-                          <span className="synergy-partner">{s.partner_name}</span>
+                          <PhotoBadge
+                            name={s.partner_name}
+                            imagePath={s.partner_id ? (plantsById.get(s.partner_id)?.image_path ?? null) : null}
+                            className="synergy-partner-badge"
+                          />
                         </div>
                         <p className="synergy-desc">{s.description}</p>
                         <p className="synergy-how">{s.how_to_use}</p>

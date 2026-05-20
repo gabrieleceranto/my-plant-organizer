@@ -7,6 +7,7 @@ export interface PlantSynergy {
   id: number;
   synergy_type: SynergyType;
   partner_name: string;
+  partner_id: number | null;
   description: string;
   how_to_use: string;
 }
