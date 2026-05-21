@@ -10,8 +10,6 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.10.3",
-    "@supabase/supabase-js": "^2.105.4",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4"
@@ -30,7 +28,6 @@
   "creator": {
     "title": "My Plant Organizer",
     "github": "https://github.com/gabrieleceranto/my-plant-organizer",
-    "supabase": "https://app.supabase.com/project/pnecwmccrqdtfkjgbips",
     "createdAt": "2026-05-17T18:23:36.931Z"
   }
 }
