@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase-server';
+import { supabase } from '@/lib/supabase';
 import PhotoBadge from '@/app/components/PhotoBadge';
 
 type LightLevel = 'pieno_sole' | 'parziale' | 'luce_indiretta';
@@ -54,7 +54,6 @@ function categoryBg(category: string) {
 }
 
 export default async function AbbinnamentiPage() {
-  const supabase = await createClient();
 
   const [{ data: groupsData }, { data: plantsData }] = await Promise.all([
     supabase
