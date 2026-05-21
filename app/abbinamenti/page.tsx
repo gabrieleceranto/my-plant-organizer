@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { plants as allPlants, groups as allGroups } from '@/lib/data';
 import PhotoBadge from '@/app/components/PhotoBadge';
 
 type LightLevel = 'pieno_sole' | 'parziale' | 'luce_indiretta';
@@ -53,22 +53,10 @@ function categoryBg(category: string) {
   return '#f3f4f6';
 }
 
-export default async function AbbinnamentiPage() {
+export default function AbbinnamentiPage() {
 
-  const [{ data: groupsData }, { data: plantsData }] = await Promise.all([
-    supabase
-      .from('plant_groups')
-      .select('id, name, description, group_type, plant_group_members(plants(id, name, category, light, root_depth_cm, image_path))')
-      .order('group_type')
-      .order('id'),
-    supabase
-      .from('plants')
-      .select('id, name, light, image_path')
-      .order('name'),
-  ]);
-
-  const groups = (groupsData ?? []) as unknown as PlantGroup[];
-  const plants = (plantsData ?? []) as PlantLight[];
+  const groups = allGroups as unknown as PlantGroup[];
+  const plants = allPlants as PlantLight[];
 
   const stessoVaso = groups.filter((g) => g.group_type === 'stesso_vaso');
   const vicine = groups.filter((g) => g.group_type === 'vicine');

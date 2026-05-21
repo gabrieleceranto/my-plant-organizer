@@ -33,10 +33,9 @@ interface Props {
   plant: Plant;
   index: number;
   plantsById: Map<number, Plant>;
-  onEdit: (plant: Plant) => void;
 }
 
-export default function PlantCard({ plant, index, plantsById, onEdit }: Props) {
+export default function PlantCard({ plant, index, plantsById }: Props) {
   const [lightbox, setLightbox] = useState(false);
   const [synergiesOpen, setSynergiesOpen] = useState(false);
 
@@ -78,7 +77,6 @@ export default function PlantCard({ plant, index, plantsById, onEdit }: Props) {
           </div>
           <div className="card-category-row">
             <span className="card-category">{plant.category}</span>
-            <button className="btn-edit-icon" onClick={() => onEdit(plant)} title="Modifica">✏</button>
           </div>
           <div className="card-meta">
             <span className={`card-light-badge ${lightConfig[plant.light].className}`}>

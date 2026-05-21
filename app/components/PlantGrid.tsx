@@ -4,7 +4,6 @@ import { useState, useMemo } from 'react';
 import type { Plant } from '@/lib/types';
 import { filterPlants } from '@/lib/filters';
 import PlantCard from './PlantCard';
-import EditDrawer from './EditDrawer';
 
 const FILTERS = [
   { label: 'Tutte', value: 'all' },
@@ -19,23 +18,14 @@ const FILTERS = [
 ];
 
 export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }) {
-  const [localPlants, setLocalPlants] = useState<Plant[]>(initialPlants);
+  const [localPlants] = useState<Plant[]>(initialPlants);
   const [activeFilter, setActiveFilter] = useState('all');
   const [search, setSearch] = useState('');
-  const [editingPlant, setEditingPlant] = useState<Plant | null>(null);
 
   const filtered = filterPlants(localPlants, activeFilter, search);
   const plantsById = useMemo(() => new Map(localPlants.map((p) => [p.id, p])), [localPlants]);
   const warnCount = localPlants.filter((p) => p.health === 'warn').length;
   const badCount = localPlants.filter((p) => p.health === 'bad').length;
-
-  function handleSaved(updated: Plant) {
-    setLocalPlants((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
-  }
-
-  function handleDeleted(id: number) {
-    setLocalPlants((prev) => prev.filter((p) => p.id !== id));
-  }
 
   return (
     <>
@@ -92,7 +82,6 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
               plant={plant}
               index={i}
               plantsById={plantsById}
-              onEdit={setEditingPlant}
             />
           ))
         )}
@@ -101,14 +90,6 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
       <footer className="site-footer">
         Terrazzo · {localPlants.length} piante catalogate
       </footer>
-
-      {editingPlant && (
-        <EditDrawer
-          plant={editingPlant}
-          onClose={() => setEditingPlant(null)}
-          onSaved={(updated) => { handleSaved(updated); setEditingPlant(null); }}
-        />
-      )}
     </>
   );
 }
