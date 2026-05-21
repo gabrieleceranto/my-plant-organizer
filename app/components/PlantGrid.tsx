@@ -33,10 +33,6 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
     setLocalPlants((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
   }
 
-  function handleFeedbackUpdated(id: number, feedback: string) {
-    setLocalPlants((prev) => prev.map((p) => (p.id === id ? { ...p, feedback } : p)));
-  }
-
   function handleDeleted(id: number) {
     setLocalPlants((prev) => prev.filter((p) => p.id !== id));
   }
@@ -62,9 +58,6 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
             <div className="stat-label">urgenti</div>
           </div>
           <a href="/abbinamenti" className="btn-abbinamenti">Abbinamenti</a>
-          <form action="/api/auth/logout" method="POST">
-            <button type="submit" className="btn-logout">Esci</button>
-          </form>
         </div>
       </header>
 
@@ -100,7 +93,6 @@ export default function PlantGrid({ plants: initialPlants }: { plants: Plant[] }
               index={i}
               plantsById={plantsById}
               onEdit={setEditingPlant}
-              onFeedbackUpdated={handleFeedbackUpdated}
             />
           ))
         )}

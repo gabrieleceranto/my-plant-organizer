@@ -20,7 +20,6 @@ export interface Plant {
   note: string;
   health: HealthStatus;
   image_path: string;
-  feedback?: string;
   light: LightLevel;
   root_depth_cm: number;
   plant_synergies?: PlantSynergy[];

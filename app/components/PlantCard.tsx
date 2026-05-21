@@ -34,34 +34,13 @@ interface Props {
   index: number;
   plantsById: Map<number, Plant>;
   onEdit: (plant: Plant) => void;
-  onFeedbackUpdated: (id: number, feedback: string) => void;
 }
 
-export default function PlantCard({ plant, index, plantsById, onEdit, onFeedbackUpdated }: Props) {
-  const [editingFeedback, setEditingFeedback] = useState(false);
-  const [draft, setDraft] = useState(plant.feedback ?? '');
-  const [saving, setSaving] = useState(false);
+export default function PlantCard({ plant, index, plantsById, onEdit }: Props) {
   const [lightbox, setLightbox] = useState(false);
   const [synergiesOpen, setSynergiesOpen] = useState(false);
 
   const synergies = plant.plant_synergies ?? [];
-
-  async function saveFeedback() {
-    setSaving(true);
-    await fetch(`/api/plants/${plant.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ feedback: draft }),
-    });
-    setSaving(false);
-    setEditingFeedback(false);
-    onFeedbackUpdated(plant.id, draft);
-  }
-
-  function cancelFeedback() {
-    setDraft(plant.feedback ?? '');
-    setEditingFeedback(false);
-  }
 
   return (
     <div className="card" style={{ animationDelay: `${index * 0.018}s` }}>
@@ -138,30 +117,6 @@ export default function PlantCard({ plant, index, plantsById, onEdit, onFeedback
               )}
             </div>
           )}
-
-          {editingFeedback ? (
-            <div className="feedback-edit">
-              <textarea
-                className="feedback-textarea"
-                rows={3}
-                placeholder="Scrivi un feedback per Claude…"
-                value={draft}
-                onChange={(e) => setDraft(e.target.value)}
-                autoFocus
-              />
-              <div className="feedback-actions">
-                <button className="btn-note-cancel" onClick={cancelFeedback}>Annulla</button>
-                <button className="btn-note-save" onClick={saveFeedback} disabled={saving}>
-                  {saving ? '…' : 'Salva'}
-                </button>
-              </div>
-            </div>
-          ) : plant.feedback ? (
-            <div className="feedback-display" onClick={() => setEditingFeedback(true)}>
-              <span className="feedback-label">📝 Feedback</span>
-              {plant.feedback}
-            </div>
-          ) : null}
         </div>
 
         <div className="card-footer">
@@ -169,13 +124,6 @@ export default function PlantCard({ plant, index, plantsById, onEdit, onFeedback
             <div className="health-dot" />
             {healthLabel[plant.health]}
           </div>
-          <button
-            className="btn-feedback"
-            onClick={() => setEditingFeedback(true)}
-            title="Aggiungi feedback per Claude"
-          >
-            📝 Feedback
-          </button>
         </div>
       </div>
     </div>

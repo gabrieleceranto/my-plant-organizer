@@ -1,15 +1,13 @@
-import { createClient } from '@/lib/supabase-server';
+import { supabase } from '@/lib/supabase';
 import type { Plant } from '@/lib/types';
 import PlantGrid from './components/PlantGrid';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Page() {
-  const supabase = await createClient();
-
   const { data, error } = await supabase
     .from('plants')
-    .select('id, name, latin, category, note, health, image_path, feedback, light, root_depth_cm, plant_synergies!plant_id(id, synergy_type, partner_name, partner_id, description, how_to_use)')
+    .select('id, name, latin, category, note, health, image_path, light, root_depth_cm, plant_synergies!plant_id(id, synergy_type, partner_name, partner_id, description, how_to_use)')
     .order('id');
 
   if (error) {

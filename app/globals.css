@@ -400,78 +400,6 @@ body {
   }
 }
 
-/* ── Feedback section ── */
-.feedback-display {
-  margin-top: 8px;
-  font-size: 0.78rem;
-  color: var(--accent);
-  background: #fdf5e8;
-  border-left: 3px solid var(--accent);
-  border-radius: 0 6px 6px 0;
-  padding: 6px 10px;
-  cursor: pointer;
-  line-height: 1.45;
-}
-
-.feedback-label {
-  display: block;
-  font-size: 0.68rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 3px;
-  opacity: 0.7;
-}
-
-.feedback-edit {
-  margin-top: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.feedback-textarea {
-  border: 1.5px solid var(--accent);
-  border-radius: 6px;
-  padding: 7px 10px;
-  font-size: 0.8rem;
-  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  outline: none;
-  resize: vertical;
-  width: 100%;
-  color: var(--text);
-}
-
-.feedback-actions {
-  display: flex;
-  gap: 6px;
-  justify-content: flex-end;
-}
-
-.btn-note-save {
-  background: var(--green-dark);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 4px 12px;
-  font-size: 0.75rem;
-  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  cursor: pointer;
-}
-
-.btn-note-save:disabled { opacity: 0.5; }
-
-.btn-note-cancel {
-  background: transparent;
-  color: var(--text-light);
-  border: 1.5px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 0.75rem;
-  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  cursor: pointer;
-}
-
 /* ── Category row with inline edit icon ── */
 .card-category-row {
   display: flex;
@@ -504,25 +432,6 @@ body {
 .btn-edit-icon:hover {
   border-color: var(--green-mid);
   color: var(--green-mid);
-}
-
-/* ── Feedback button ── */
-.btn-feedback {
-  font-size: 0.72rem;
-  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  font-weight: 500;
-  padding: 4px 10px;
-  border-radius: 12px;
-  border: 1.5px solid var(--accent);
-  color: var(--accent);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.btn-feedback:hover {
-  background: var(--accent);
-  color: white;
 }
 
 /* ── Sinergie ── */
